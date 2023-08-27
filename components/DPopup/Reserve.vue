@@ -76,10 +76,12 @@ async function send() {
         <input class="d-popup-reserve__input" v-model="phone" placeholder="+7 (" required />
         <div class="d-popup-reserve__input-block">
           <input class="d-popup-reserve__input" v-model="date" placeholder="Дата" type="date" />
-          <input class="d-popup-reserve__input" v-model="time" placeholder="Время" type="time" />
-          <input class="d-popup-reserve__input" v-model="count_guests" placeholder="Количество гостей" type="number" />
+          <input class="d-popup-reserve__input" v-model="time" placeholder="Время" />
         </div>
-        <input class="d-popup-reserve__input" v-model="comment" placeholder="Комментарий" />
+        <div class="d-popup-reserve__input-block">
+          <input class="d-popup-reserve__input" v-model="count_guests" placeholder="Количество гостей" type="number" />
+          <input class="d-popup-reserve__input" v-model="comment" placeholder="Комментарий" />
+        </div>
       </div>
       <DButton theme="dark" @click="send" type="submit">Отправить</DButton>
     </form>
@@ -94,7 +96,7 @@ async function send() {
 .d-popup-reserve {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
 }
 
@@ -106,14 +108,14 @@ async function send() {
   gap: 15px;
   align-items: center;
   margin: 0 auto;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .d-popup-reserve__input-block {
   width: 100%;
   display: flex;
   align-items: center;
-  flex-direction: v-bind(containerDirection);
+  // flex-direction: v-bind(containerDirection);
   gap: 30px;
 }
 
@@ -129,6 +131,6 @@ async function send() {
 }
 
 .d-popup-reserve__input::placeholder {
-  color: var(--gray-primary, #9B9CA2);
+  color: #9B9CA2;
 }
 </style>

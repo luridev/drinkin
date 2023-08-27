@@ -44,17 +44,19 @@ const emits = defineEmits<Emits>();
 }
 .d-modal {
   position: fixed;
-  top: 50%;
   text-align: center;
   z-index: 1000;
   background-color: $color-white;
-  width: 70%;
+  width: 80%;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 20px;
   padding: 20px;
   min-height: 40vh;
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .d-modal {
@@ -66,7 +68,6 @@ const emits = defineEmits<Emits>();
 
 .d-modal-header {
   display: flex;
-  // padding: 40px;
   padding-bottom: 0;
 }
 </style>
