@@ -2,6 +2,8 @@
 import { register } from 'swiper/element/bundle';
 register();
 
+const { companies } = useCompanies();
+
 const route = useRoute();
 const hashId = computed(() => route.hash.slice(1));
 
@@ -47,9 +49,7 @@ function slideRight() {
   swiperThumbsRef.value?.swiper?.slideNext();
 }
 
-const { companies } = useCompanies();
-
-const isCompaniesExist = computed(() => companies.value.length > 0);
+const isCompaniesExist = computed(() => companies.value?.length > 0);
 
 const { data } = await useFetch<{
   data: {
@@ -59,11 +59,11 @@ const { data } = await useFetch<{
 }>(formatApi('/institutions/main/page/'));
 
 watch(companies, () => {
-  if (process.server || companies.value.length == 0) {
+  if (process.server || companies.value == undefined || companies.value?.length == 0) {
     return;
   }
 
-  const index = companies.value.findIndex((item) => {
+  const index = companies.value?.findIndex((item) => {
     const url = item.seoUrl.endsWith('/') ? item.seoUrl.slice(0, -1) : item.seoUrl;
     return url === hashId.value;
   });
@@ -76,11 +76,12 @@ watch(companies, () => {
   setTimeout(() => swiperThumbsRef.value?.swiper?.update(), 500)
 }, { immediate: true })
 
-const seoTitle = computed(() => data.value?.data?.title ?? '');
+const seoTitle = computed(() => data.value?.data?.title ?? 'Сеть ресторанов DRINK IN GROUP');
 const seoDescription = computed(() => data.value?.data?.description ?? '');
 </script>
 
 <template>
+<div>
   <Head>
     <Title>{{ seoTitle }}</Title>
     <Meta name="description" :content="seoDescription" />
@@ -146,6 +147,7 @@ const seoDescription = computed(() => data.value?.data?.description ?? '');
     />
   </ClientOnly>
   <DBannerLogo />
+</div>
 </template>
 
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useImage, useScrollLock } from '@vueuse/core';
+import { useScrollLock } from '@vueuse/core';
 import { register } from 'swiper/element/bundle';
 register();
 
@@ -7,7 +7,9 @@ const { companies } = useCompanies();
 
 const route = useRoute();
 const id = Array.isArray(route.params.id) ? route.params.id.join('/') : route.params.id;
-const currentCompany = computed(() => companies.value.find((c) => c.seoUrl === id || c.name === id));
+const currentCompany = computed(() => {
+  return companies.value?.find((c) => c.seoUrl === id || c.name === id)
+});
 
 const currentSection = ref<'none' | 'about' | 'events' | 'sauna' | 'reserve'>('none');
 
@@ -65,21 +67,21 @@ watch(currentSection, () => {
 const currentImage = ref();
 const backgroundImage = computed(() => {
   const image = currentImage.value ?? currentCompany.value?.slider?.[0];
-  return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
+
+  if (image != undefined) {
+    return `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(${image})`;
+  }
 });
 
-onMounted(() => {
-  currentCompany.value?.sections?.forEach((section) => {
-    const { isLoading } = useImage({ src: section.background })
-  });
-});
-
-function updateCurrentImage(image?: string) {
+async function updateCurrentImage(image?: string) {
   if (image == undefined) {
     return;
   }
 
-  document.createElement('img').setAttribute('src', image);
+  const img = new Image();
+  img.src = image;
+  await img.decode();
+
   currentImage.value = image;
 }
 
@@ -162,8 +164,9 @@ const textAlign = computed(() => {
 </script>
 
 <template>
+<div>
   <Head>
-    <Title>{{ currentCompany?.seoTitle ?? '' }}</Title>
+    <Title>{{ currentCompany?.seoTitle ?? 'Сеть ресторанов DRINK IN GROUP' }}</Title>
     <Meta name="description" :content="currentCompany?.seoDescription ?? ''" />
   </Head>
 
@@ -222,6 +225,7 @@ const textAlign = computed(() => {
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <style>
