@@ -53,8 +53,6 @@ const backgroundImage = computed(() => {
   }
 });
 
-onMounted(() => nextTick(() => updateBackground(isMobile.value ? currentCompany.value?.mobileSlider?.[0] : currentCompany.value?.slider?.[0])));
-
 async function updateBackground(image?: any) {
   if (image == undefined || currentBackground.value == image) {
     return;
@@ -119,6 +117,12 @@ onMounted(() => {
 watch(currentSection, () => {
   isLocked.value = currentSection.value != 'none';
 })
+
+watch(currentCompany, () => {
+  if (currentCompany.value != undefined) {
+    updateBackground(isMobile.value ? currentCompany.value?.mobileSlider?.[0] : currentCompany.value?.slider?.[0]);
+  }
+}, { immediate: true });
 
 const dSubcontentFlexDirection = computed(() => isMobile.value ? 'column' : 'row');
 
